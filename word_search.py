@@ -1,7 +1,13 @@
 from sys import stdin
 
 
-def computeLPS(p):
+def compute_lps(p):
+    """
+    This method computes the longest proper prefix of a pattern that also happens to be a suffix of the same pattern.
+
+    Input: A string value p, representing the pattern that is being found
+    Output: An array with the longest proper prefixes that are also profer suffixes of p
+    """
     m = len(p)
     lps = [0]*m
     i, j = 0, 1
@@ -20,10 +26,16 @@ def computeLPS(p):
     return lps
 
 
-def kmpSearch(t, p):
+def kmp_search(t, p):
+    """
+    This method computes all the occurrences of a pattern in a given text.
+
+    Input: Two string values t and p, where p represents the pattern that needs to be found in the text t
+    Output: An array with the starting positions where p occurs in t as a substring
+    """
     ans = []
     n, m, i, j = len(t), len(p), 0, 0
-    lps = computeLPS(p)
+    lps = compute_lps(p)
     while (i < n):
         if (t[i] == p[j]):
             i += 1
@@ -41,8 +53,10 @@ def kmpSearch(t, p):
 
 def get_strips(board, n, m):
     """
-        Input: A word search board and its dimesions
-        Output: A map cotaining the longest possible word strips in all directions (vertical, horizontal and diagonal)
+        This method gets the longest possible word strips in the board in all directions (vertical, horizontal, digonal).
+
+        Input: A n x m word search board
+        Output: A map cotaining the longest possible word strips in all directions with its respective starting positions (vertical, horizontal and diagonal)
     """
     strips = {'h': [], 'v': [], 'd': []}
     # Horizonal strips
@@ -72,41 +86,65 @@ def get_strips(board, n, m):
 
 
 def word_search(board, words, n, m):
+    """
+    This method prints the positions of the words that were found in the board
+
+    Input: A n x m word search board and a list of words to find in the board
+    Output: None
+    """
     for i in range(len(board)):
         board[i] = board[i].split()
     strips = get_strips(board, n, m)
     for word in words:
         print("Searching '{0}'".format(''.join(word)))
-        locations = []
+        word_board_positions = []
         for direction in strips:
-            for index in range(len(strips[direction])):
-                strip = strips[direction][index][0]
-                initial_positions = kmpSearch(strip, word)
-                for initial_position in initial_positions:
-                    positions = []
+            for (strip, strip_pos) in strips[direction]:
+                word_strip_positions = kmp_search(strip, word)
+                for word_strip_pos in word_strip_positions:
+                    word_board_pos = []
                     if (direction == 'h'):
-                        j = initial_position
+                        j = word_strip_pos
                         for _ in range(len(word)):
-                            positions.append((index, j))
+                            word_board_pos.append((strip_pos[0], j))
                             j += 1
                     elif (direction == 'v'):
-                        i = initial_position
+                        i = word_strip_pos
                         for _ in range(len(word)):
-                            positions.append((i, index))
+                            word_board_pos.append((i, strip_pos[1]))
                             i += 1
                     else:
-                        pass
-                    locations.append(positions)
-        if len(locations) > 0:
-            pass
+                        i = strip_pos[0] + word_strip_pos
+                        j = strip_pos[1] + word_strip_pos
+                        for _ in range(len(word)):
+                            word_board_pos.append((i, j))
+                            i = i + 1
+                            j = j + 1
+                    word_board_positions.append(word_board_pos)
+        if len(word_board_positions) > 0:
+            sep = False
+            for word_board_pos in word_board_positions:
+                if not sep:
+                    sep = True
+                else:
+                    print("-------------")
+                for i in range(len(word)):
+                    print("{0} - {1}".format(word[i], word_board_pos[i]))
         else:
             print("'{0}' not found".format(word))
 
 
 def main():
+    """
+    This method is in charge of the standard input and output
+
+    Input: None
+    Output: None
+    """
     # Read all lines of input file. Doing this here improves the execution time as it only needs to be done once.
     lines = stdin.readlines()
     current_line = 0
+    case_num = 1
     while (current_line < len(lines)):
         n, m = map(int, lines[current_line].split())
         current_line += 1
@@ -117,7 +155,9 @@ def main():
                 current_line += 1
             words = lines[current_line].split()
             current_line += 1
+            print("Case #{0}".format(case_num))
             word_search(board, words, n, m)
+            case_num += 1
 
 
 if __name__ == '__main__':

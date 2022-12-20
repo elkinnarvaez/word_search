@@ -39,7 +39,7 @@ A test case where N = 0 or M = 0 finishes the execution of the program.
 ```
 3 5
 S O L A F
-U N O B G
+U N S U N
 N U T C J
 SUN SOL LOT ONU RAY
 0 0

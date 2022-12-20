@@ -30,11 +30,7 @@ In order to run this program please follow the steps bellow.
 
 ## Input description
 
-The _input.txt_ file contains the input data used in the program. It can have several test cases, where each case consists of
-
-1. two integers representing the dimensions of the word search board: number of rows (N) and number of cloumns (M);
-2. followed by N lines, where each line contains M letters separated by an space character;
-3. and a single line with with the words to find in the board separated by an space character.
+The _input.txt_ file contains the input data used in the program. It can have several test cases, where each case consists of two integers representing the dimensions of the word search board: number of rows (N) and number of cloumns (M); followed by N lines, where each line contains M letters separated by an space character; and a single line with with the words to find in the board separated by an space character.
 
 A test case where N = 0 or M = 0 finishes the execution of the program.
 
